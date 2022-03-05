@@ -1,7 +1,7 @@
 {
   "name": "fastify-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "Example tiny server with a static folder and a JSON endpoint",
   "main": "index.js",
   "private": true,
   "scripts": {

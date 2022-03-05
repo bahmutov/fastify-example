@@ -1,5 +1,7 @@
 # Fastify example
 
+> Example tiny server with a static folder and a JSON endpoint
+
 ## Install and use
 
 ```
