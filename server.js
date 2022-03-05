@@ -12,6 +12,9 @@ let index = 0
 fastify.get('/fruit', async (request, reply) => {
   const fruit = fruits[index]
   index += 1
+  if (index >= fruits.length) {
+    index = 0
+  }
   return { fruit }
 })
 
