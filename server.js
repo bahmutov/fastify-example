@@ -6,10 +6,13 @@ fastify.register(require('fastify-static'), {
   root: path.join(__dirname, 'public'),
 })
 
+const fruits = ['Apples', 'Oranges', 'Bananas', 'Pears', 'Grapes']
+// returns each fruit one by one, round-robin style
+let index = 0
 fastify.get('/fruit', async (request, reply) => {
-  const fruits = ['Apples', 'Oranges', 'Bananas', 'Pears', 'Grapes']
-  const randomFruit = fruits[Math.floor(Math.random() * fruits.length)]
-  return { fruit: randomFruit }
+  const fruit = fruits[index]
+  index += 1
+  return { fruit }
 })
 
 // Run the server!
