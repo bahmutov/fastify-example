@@ -1,0 +1,21 @@
+{
+  "name": "fastify-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^3.27.2",
+    "fastify-static": "^4.5.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1"
+  }
+}
