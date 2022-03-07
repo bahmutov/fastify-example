@@ -4,7 +4,11 @@
     <p>Picked a random fruit: <span id="fruit">loading...</span></p>
     <script>
       function getFruit() {
-        fetch('/fruit')
+        fetch('/fruit', {
+          headers: {
+            'x-requesting': 'fruit',
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
             document.getElementById('fruit').innerText = data.fruit
