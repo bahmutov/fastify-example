@@ -10,6 +10,11 @@ const fruits = ['Apples', 'Oranges', 'Bananas', 'Pears', 'Grapes']
 // returns each fruit one by one, round-robin style
 let index = 0
 fastify.get('/fruit', async (request, reply) => {
+  // simulate an occasional server error if needed
+  // if (Math.random() < 0.4) {
+  //   throw new Error('Something went wrong')
+  // }
+
   const fruit = fruits[index]
   index += 1
   if (index >= fruits.length) {
