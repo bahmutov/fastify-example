@@ -1,0 +1,37 @@
+<html>
+  <body>
+    <h1>Fastify Example</h1>
+    <h2>Picked fruits</h2>
+    <ul id="fruits"></ul>
+    <script>
+      function getFruits() {
+        fetch('/fruits', {
+          headers: {
+            'x-requesting': 'fruits',
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error ${response.status}`)
+            }
+            return response.json()
+          })
+          .then((fruits) => {
+            const el = document.getElementById('fruits')
+            if (fruits.length === 0) {
+              el.innerText = 'No fruits'
+            } else {
+              el.innerHTML = fruits.map((fruit) => `<li>${fruit}</li>`).join('')
+            }
+          })
+          .catch((err) => {
+            const el = document.getElementById('fruits')
+            console.error('error fetching fruit')
+            console.error(err)
+            el.innerText = err.message
+          })
+      }
+      getFruits()
+    </script>
+  </body>
+</html>

@@ -23,6 +23,17 @@ fastify.get('/fruit', async (request, reply) => {
   return { fruit }
 })
 
+// can return no fruits, one or more fruits
+fastify.get('/fruits', async (request, reply) => {
+  if (Math.random() < 0.1) {
+    // small chance that it returns no fruits
+    return []
+  }
+
+  const picked = fruits.filter(() => Math.random() < 0.5)
+  return picked
+})
+
 // Run the server!
 const start = async () => {
   try {
