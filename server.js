@@ -34,6 +34,17 @@ fastify.get('/fruits', async (request, reply) => {
   return picked
 })
 
+// always returns the same object
+fastify.get('/sale', async (request, reply) => {
+  return {
+    sale: {
+      fruit: 'Mango',
+      price: '$1.99',
+      quantity: 20,
+    },
+  }
+})
+
 // Run the server!
 const start = async () => {
   try {
