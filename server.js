@@ -1,9 +1,20 @@
 const path = require('path')
+const fs = require('fs')
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true })
 
+const publicFolder = path.join(__dirname, 'public')
+
+const clickJs = fs.readFileSync(path.join(publicFolder, 'click.js'), 'utf8')
+
+fastify.get('/click.js', async (request, reply) => {
+  setTimeout(() => {
+    reply.type('text/javascript').send(clickJs)
+  }, 2000)
+})
+
 fastify.register(require('fastify-static'), {
-  root: path.join(__dirname, 'public'),
+  root: publicFolder,
 })
 
 const fruits = ['Apples', 'Oranges', 'Bananas', 'Pears', 'Grapes']

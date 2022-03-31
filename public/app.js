@@ -19,4 +19,3 @@ function getFruit() {
       document.getElementById('fruit').innerText = err.message
     })
 }
-document.getElementById('load-fruit').addEventListener('click', getFruit)
