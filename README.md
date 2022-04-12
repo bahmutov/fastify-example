@@ -4,6 +4,10 @@
 
 ![Example fruit](./images/grapes.png)
 
+## Cypress course
+
+This example application is used for the online course [Cypress Network Testing Exercises](https://cypress.tips/courses)
+
 ## Install and use
 
 ```
