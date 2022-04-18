@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 1rem;
+}
+
+p {
+  margin-top: 1rem;
+}
+
+#fruit {
+  font-weight: 400;
+}
