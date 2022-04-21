@@ -7,6 +7,16 @@ const publicFolder = path.join(__dirname, 'public')
 
 const clickJs = fs.readFileSync(path.join(publicFolder, 'click.js'), 'utf8')
 
+// if the sender sends "request-id" header
+// return it as response header "x-request-id"
+fastify.addHook('preHandler', (request, reply, done) => {
+  const reqId = request.headers['request-id']
+  if (reqId) {
+    reply.header('x-request-id', reqId)
+  }
+  done()
+})
+
 fastify.get('/click.js', async (request, reply) => {
   setTimeout(() => {
     reply.type('text/javascript').send(clickJs)
