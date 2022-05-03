@@ -1,0 +1,33 @@
+<html>
+  <html>
+    <link rel="stylesheet" href="style.css" />
+  </html>
+  <body>
+    <h1>Fastify Example</h1>
+    <p>Picked a random fruit: <span id="fruit">loading...</span></p>
+    <script>
+      function getFruit() {
+        fetch('/fruit-long', {
+          headers: {
+            'x-requesting': 'fruit',
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error ${response.status}`)
+            }
+            return response.json()
+          })
+          .then((data) => {
+            document.getElementById('fruit').innerText = data.fruit
+          })
+          .catch((err) => {
+            console.error('error fetching fruit')
+            console.error(err)
+            document.getElementById('fruit').innerText = err.message
+          })
+      }
+      getFruit()
+    </script>
+  </body>
+</html>

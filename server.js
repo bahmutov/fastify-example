@@ -55,6 +55,9 @@ fastify.get('/fruits', async (request, reply) => {
   return picked
 })
 
+// this response never finishes
+fastify.get('/fruit-long', (request, reply) => {})
+
 // always returns the same object
 fastify.get('/sale', async (request, reply) => {
   return {
