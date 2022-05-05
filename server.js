@@ -69,6 +69,18 @@ fastify.get('/sale', async (request, reply) => {
   }
 })
 
+fastify.post('/calculate', (request, reply) => {
+  console.log(request.body)
+  const { a, b, operation } = request.body
+  if (operation === '+') {
+    return { answer: a + b, a, b, operation }
+  }
+  if (operation === '-') {
+    return { answer: a - b, a, b, operation }
+  }
+  throw new Error(`Unsupported operation: ${operation}`)
+})
+
 // Run the server!
 const start = async () => {
   try {
