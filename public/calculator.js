@@ -32,3 +32,7 @@ document.getElementById('add').addEventListener('click', function () {
 document.getElementById('sub').addEventListener('click', function () {
   compute('-')
 })
+
+document.getElementById('mul').addEventListener('click', function () {
+  compute('*')
+})
