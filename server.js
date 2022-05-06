@@ -55,6 +55,11 @@ fastify.get('/fruits', async (request, reply) => {
   return picked
 })
 
+// returns all possible fruits
+fastify.get('/all-fruits', async (request, reply) => {
+  return fruits
+})
+
 // this response never finishes
 fastify.get('/fruit-long', (request, reply) => {})
 
