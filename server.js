@@ -57,7 +57,7 @@ fastify.get('/fruits', async (request, reply) => {
 
 // returns all possible fruits
 fastify.get('/all-fruits', async (request, reply) => {
-  return fruits
+  return fruits.map((fruit, k) => ({ fruit, k }))
 })
 
 // this response never finishes
