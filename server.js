@@ -74,6 +74,10 @@ fastify.get('/sale', async (request, reply) => {
   }
 })
 
+fastify.post('/track', (request, reply) => {
+  return { ok: true }
+})
+
 fastify.post('/calculate', (request, reply) => {
   console.log(request.body)
   const { a, b, operation } = request.body
