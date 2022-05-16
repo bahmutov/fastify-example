@@ -26,6 +26,21 @@ fastify.addHook('preHandler', (request, reply, done) => {
   done()
 })
 
+fastify.addHook('preHandler', (request, reply, done) => {
+  Object.keys(request.headers).forEach((key) => {
+    if (key.startsWith('x')) {
+      console.log(
+        '%s %s with header %s: %s',
+        request.method,
+        request.url,
+        key,
+        request.headers[key],
+      )
+    }
+  })
+  done()
+})
+
 fastify.get('/click.js', async (request, reply) => {
   setTimeout(() => {
     reply.type('text/javascript').send(clickJs)
