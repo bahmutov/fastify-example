@@ -6,6 +6,15 @@ const fastify = require('fastify')({ logger: true })
 const publicFolder = path.join(__dirname, 'public')
 
 const clickJs = fs.readFileSync(path.join(publicFolder, 'click.js'), 'utf8')
+const indexDoc = fs.readFileSync(path.join(publicFolder, 'index.html'), 'utf8')
+const indexMobileDoc = fs.readFileSync(
+  path.join(publicFolder, 'index-mobile.html'),
+  'utf8',
+)
+
+function isMobile(headers) {
+  return headers['user-agent'].includes('Mobile')
+}
 
 // if the sender sends "request-id" header
 // return it as response header "x-request-id"
@@ -21,6 +30,14 @@ fastify.get('/click.js', async (request, reply) => {
   setTimeout(() => {
     reply.type('text/javascript').send(clickJs)
   }, 2000)
+})
+
+fastify.get('/', (request, reply) => {
+  if (isMobile(request.headers)) {
+    reply.type('text/html').send(indexMobileDoc)
+  } else {
+    reply.type('text/html').send(indexDoc)
+  }
 })
 
 fastify.register(require('fastify-static'), {
