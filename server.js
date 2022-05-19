@@ -106,6 +106,11 @@ fastify.get('/sale', async (request, reply) => {
   }
 })
 
+fastify.post('/got-fruit', (request, reply) => {
+  console.log('got fruit:', request.body)
+  return { ok: true }
+})
+
 fastify.post('/track', (request, reply) => {
   return { ok: true }
 })

@@ -20,6 +20,11 @@
           })
           .then((data) => {
             document.getElementById('fruit').innerText = data.fruit
+            // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
+            navigator.sendBeacon(
+              '/got-fruit',
+              JSON.stringify({ fruit: data.fruit }),
+            )
           })
           .catch((err) => {
             console.error('error fetching fruit')
