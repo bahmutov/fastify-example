@@ -55,7 +55,7 @@ fastify.get('/', (request, reply) => {
   }
 })
 
-fastify.register(require('fastify-static'), {
+fastify.register(require('@fastify/static'), {
   root: publicFolder,
 })
 

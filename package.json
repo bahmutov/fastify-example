@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^3.27.2",
-    "fastify-static": "^4.5.0"
+    "@fastify/static": "^5.0.2",
+    "fastify": "^3.27.2"
   },
   "devDependencies": {
     "prettier": "^2.5.1"
