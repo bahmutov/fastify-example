@@ -13,7 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/static": "^5.0.2",
-    "fastify": "^3.27.2"
+    "fastify": "^3.27.2",
+    "fastify-sse-v2": "^2.0.6"
   },
   "devDependencies": {
     "prettier": "^2.5.1"

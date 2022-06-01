@@ -1,0 +1,14 @@
+<html>
+  <body>
+    <h2>Server-Side Events Fruits</h2>
+    <ul id="fruits"></ul>
+    <script>
+      const source = new EventSource('/fruits-sse')
+      source.onmessage = function (event) {
+        const data = JSON.parse(event.data)
+        const el = document.getElementById('fruits')
+        el.innerHTML += `<li>${data.fruit}</li>`
+      }
+    </script>
+  </body>
+</html>

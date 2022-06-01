@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const FastifySSEPlugin = require('fastify-sse-v2')
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true })
 
@@ -15,6 +16,9 @@ const indexMobileDoc = fs.readFileSync(
 function isMobile(headers) {
   return headers['user-agent'].includes('Mobile')
 }
+
+// set a very long retry so that the stream does not retry
+fastify.register(FastifySSEPlugin, { retryDelay: 60_000 })
 
 // if the sender sends "request-id" header
 // return it as response header "x-request-id"
@@ -62,18 +66,42 @@ fastify.register(require('@fastify/static'), {
 const fruits = ['Apples', 'Oranges', 'Bananas', 'Pears', 'Grapes']
 // returns each fruit one by one, round-robin style
 let index = 0
+
+function getNextFruit() {
+  const fruit = fruits[index]
+  index += 1
+  if (index >= fruits.length) {
+    index = 0
+  }
+  return fruit
+}
+
 fastify.get('/fruit', async (request, reply) => {
   // simulate an occasional server error if needed
   // if (Math.random() < 0.4) {
   //   throw new Error('Something went wrong')
   // }
 
-  const fruit = fruits[index]
-  index += 1
-  if (index >= fruits.length) {
-    index = 0
-  }
+  const fruit = getNextFruit()
   return { fruit }
+})
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
+
+fastify.get('/fruits-sse', (req, res) => {
+  res.sse(
+    (async function* source() {
+      for (let i = 0; i < 3; i++) {
+        await sleep(2000)
+        const fruit = getNextFruit()
+        yield { id: String(i), data: JSON.stringify({ fruit }) }
+      }
+    })(),
+  )
 })
 
 // can return no fruits, one or more fruits
