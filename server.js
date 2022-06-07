@@ -57,6 +57,25 @@ fastify.get('/click.js', async (request, reply) => {
   }, 2000)
 })
 
+fastify.post('/login', (request, reply) => {
+  console.log('login with body %o', request.body)
+  const { username, password } = request.body
+  if (username === 'gleb' && password === 'network-course') {
+    reply.setCookie('userName', username, {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+      signed: true,
+      // do not use "secure: true" because we are on http localhost
+      // secure: true,
+    })
+    return { ok: true }
+  } else {
+    console.log('invalid credentials')
+    reply.code(401)
+  }
+})
+
 fastify.get('/', (request, reply) => {
   console.log('request.headers %o', request.headers)
   console.log('request cookies %o', request.cookies)
@@ -165,25 +184,6 @@ fastify.post('/got-fruit', (request, reply) => {
 
 fastify.post('/track', (request, reply) => {
   return { ok: true }
-})
-
-fastify.post('/login', (request, reply) => {
-  console.log('login with body %o', request.body)
-  const { username, password } = request.body
-  if (username === 'gleb' && password === 'network-course') {
-    reply.setCookie('userName', username, {
-      domain: 'localhost',
-      path: '/',
-      httpOnly: true,
-      signed: true,
-      // do not use "secure: true" because we are on http localhost
-      // secure: true,
-    })
-    return { ok: true }
-  } else {
-    console.log('invalid credentials')
-    reply.code(401)
-  }
 })
 
 fastify.post('/calculate', (request, reply) => {
