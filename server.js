@@ -20,6 +20,12 @@ function isMobile(headers) {
 // set a very long retry so that the stream does not retry
 fastify.register(FastifySSEPlugin, { retryDelay: 60_000 })
 
+// https://github.com/fastify/fastify-cookie
+fastify.register(require('@fastify/cookie'), {
+  secret: 'my-secret-for-signing-cookies', // for cookies signature
+  parseOptions: {}, // options for parsing cookies
+})
+
 // if the sender sends "request-id" header
 // return it as response header "x-request-id"
 fastify.addHook('preHandler', (request, reply, done) => {
@@ -52,6 +58,24 @@ fastify.get('/click.js', async (request, reply) => {
 })
 
 fastify.get('/', (request, reply) => {
+  console.log('request.headers %o', request.headers)
+  console.log('request cookies %o', request.cookies)
+
+  if (request.cookies.userName) {
+    const decodedUserName = request.unsignCookie(request.cookies.userName)
+    if (decodedUserName.valid) {
+      const userName = decodedUserName.value
+      if (userName) {
+        console.log('/ has user name cookie value "%s"', userName)
+        const userPage = indexDoc.replace(
+          '<h1>Fastify Example</h1>',
+          `<h1>Fastify Example for ${userName}</h1>`,
+        )
+        return reply.type('text/html').send(userPage)
+      }
+    }
+  }
+
   if (isMobile(request.headers)) {
     reply.type('text/html').send(indexMobileDoc)
   } else {
@@ -141,6 +165,25 @@ fastify.post('/got-fruit', (request, reply) => {
 
 fastify.post('/track', (request, reply) => {
   return { ok: true }
+})
+
+fastify.post('/login', (request, reply) => {
+  console.log('login with body %o', request.body)
+  const { username, password } = request.body
+  if (username === 'gleb' && password === 'network-course') {
+    reply.setCookie('userName', username, {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+      signed: true,
+      // do not use "secure: true" because we are on http localhost
+      // secure: true,
+    })
+    return { ok: true }
+  } else {
+    console.log('invalid credentials')
+    reply.code(401)
+  }
 })
 
 fastify.post('/calculate', (request, reply) => {

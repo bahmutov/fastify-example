@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cookie": "^6.0.0",
     "@fastify/static": "^5.0.2",
     "fastify": "^3.27.2",
     "fastify-sse-v2": "^2.0.6"
