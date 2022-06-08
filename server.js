@@ -12,6 +12,10 @@ const indexMobileDoc = fs.readFileSync(
   path.join(publicFolder, 'index-mobile.html'),
   'utf8',
 )
+const unreliableDoc = fs.readFileSync(
+  path.join(publicFolder, 'unreliable.html'),
+  'utf8',
+)
 
 function isMobile(headers) {
   return headers['user-agent'].includes('Mobile')
@@ -99,6 +103,28 @@ fastify.get('/', (request, reply) => {
     reply.type('text/html').send(indexMobileDoc)
   } else {
     reply.type('text/html').send(indexDoc)
+  }
+})
+
+let unreliableCount = 0
+fastify.post('/unreliable', (request, reply) => {
+  console.log('reset unreliable count to 0')
+  unreliableCount = 0
+  reply.send({ ok: true })
+})
+
+fastify.get('/unreliable', (request, reply) => {
+  unreliableCount += 1
+  if (unreliableCount > 7) {
+    unreliableCount = 0
+  }
+
+  if (unreliableCount < 3) {
+    console.log('unreliable attempt %d, sending an error', unreliableCount)
+    reply.code(500).send('Server error')
+  } else {
+    console.log('unreliable attempt %d, sending the page', unreliableCount)
+    reply.type('text/html').send(unreliableDoc)
   }
 })
 
