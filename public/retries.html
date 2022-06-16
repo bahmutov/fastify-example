@@ -1,0 +1,27 @@
+<body>
+  <h1>Retries</h1>
+  <p>
+    This page makes an Ajax call to the <code>/unreliable</code> endpoint. If
+    the server responds with an error, this page waits 1 second and tries again.
+  </p>
+  <output id="result" />
+  <script>
+    const result = document.getElementById('result')
+
+    function ping(attempt = 1) {
+      if (attempt > 4) {
+        throw new Error('Failed to get a response')
+      }
+
+      fetch('/unreliable').then((r) => {
+        if (r.ok) {
+          result.innerText = 'OK'
+        } else {
+          result.innerText = `FAIL ${attempt}`
+          setTimeout(() => ping(attempt + 1), 1000)
+        }
+      })
+    }
+    ping()
+  </script>
+</body>
