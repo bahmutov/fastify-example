@@ -21,3 +21,8 @@ main #answer {
   text-align: center;
   font-size: 1.5em;
 }
+
+main .row.errors {
+  color: red;
+  align-self: center;
+}

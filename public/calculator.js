@@ -28,6 +28,16 @@ if (Math.random() < 0.5) {
 }
 
 function compute(operation) {
+  const errors = document.querySelector('.errors')
+  errors.innerText = ''
+  if (document.getElementById('num1').value === '') {
+    errors.innerText = 'Missing the first number'
+    return
+  }
+  if (document.getElementById('num2').value === '') {
+    errors.innerText = 'Missing the second number'
+    return
+  }
   const a = parseFloat(document.getElementById('num1').value)
   const b = parseFloat(document.getElementById('num2').value)
   trackEvent(operation, { a, b })
