@@ -2,6 +2,9 @@
   <h1>Lucky 7</h1>
   <div id="number" />
   <script>
+    // every second the page requests a random number
+    // from the backend, until
+    // the backed responds with the number 7
     const i = setInterval(() => {
       fetch('/random-digit')
         .then((r) => r.json())
