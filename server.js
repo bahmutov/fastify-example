@@ -212,6 +212,14 @@ fastify.post('/track', (request, reply) => {
   return { ok: true }
 })
 
+fastify.get('/random-digit', (request, reply) => {
+  const n = parseInt(String(Math.random()).slice(2, 3))
+  console.log('returning random digit %d', n)
+  return {
+    n,
+  }
+})
+
 fastify.post('/calculate', (request, reply) => {
   console.log(request.body)
   const { a, b, operation } = request.body

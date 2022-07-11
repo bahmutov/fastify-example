@@ -1,0 +1,17 @@
+<body>
+  <h1>Lucky 7</h1>
+  <div id="number" />
+  <script>
+    const i = setInterval(() => {
+      fetch('/random-digit')
+        .then((r) => r.json())
+        .then((data) => data.n)
+        .then((n) => {
+          document.getElementById('number').innerText = n
+          if (n === 7) {
+            clearInterval(i)
+          }
+        })
+    }, 1000)
+  </script>
+</body>
