@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <style>
+      #api-response {
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Api Burst</h1>
+    <button id="burst">Make several API calls</button>
+    <div id="api-response" />
+
+    <script>
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms))
+      }
+      document.getElementById('burst').addEventListener('click', async () => {
+        const output = document.getElementById('api-response')
+        // the page makes at least 1 API call
+        const n = Math.round(Math.random() * 10) + 1
+        for (let k = 0; k < n; k += 1) {
+          await sleep(k * 50 + 50)
+          const x = await fetch('/random-digit')
+            .then((r) => r.json())
+            .then((data) => data.n)
+          output.innerText = `${k + 1} said ${x}`
+        }
+      })
+    </script>
+  </body>
+</html>
