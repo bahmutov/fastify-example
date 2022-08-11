@@ -1,3 +1,5 @@
+const { stripIndent } = require('common-tags')
+const humanizeDuration = require('humanize-duration')
 const path = require('path')
 const fs = require('fs')
 const FastifySSEPlugin = require('fastify-sse-v2')
@@ -5,7 +7,7 @@ const FastifySSEPlugin = require('fastify-sse-v2')
 const fastify = require('fastify')({ logger: true })
 
 // https://github.com/fastify/fastify-formbody
-// fastify.register(require('@fastify/formbody'))
+fastify.register(require('@fastify/formbody'))
 
 const publicFolder = path.join(__dirname, 'public')
 
@@ -234,10 +236,33 @@ fastify.post('/calculate', (request, reply) => {
   throw new Error(`Unsupported operation: ${operation}`)
 })
 
+const items = []
+
 fastify.post('/add-item', (req, reply) => {
-  console.log('adding item request')
-  console.log(req.body)
-  reply.code(200)
+  const item = {
+    name: req.body['item-name'],
+    price: parseInt(req.body.price),
+  }
+
+  console.log('adding item request %o', item)
+  reply.type('text/html').send(stripIndent`
+    <body>
+      <h3>${req.body['item-name']} will be added</h3>
+      <p>It might take a few minutes for the item to be added and indexed</p>
+      <p><a href="/items.html">Add another item</a></p>
+    </body>
+  `)
+
+  const addingDelay = Math.random() * 60_000
+  console.log(
+    'will add %o to the database after %s',
+    item,
+    humanizeDuration(addingDelay, { round: true }),
+  )
+  setTimeout(() => {
+    console.log('adding the item %o to the database', item)
+    items.push(item)
+  }, addingDelay)
 })
 
 // Run the server!
