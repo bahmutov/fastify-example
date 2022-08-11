@@ -4,6 +4,9 @@ const FastifySSEPlugin = require('fastify-sse-v2')
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true })
 
+// https://github.com/fastify/fastify-formbody
+// fastify.register(require('@fastify/formbody'))
+
 const publicFolder = path.join(__dirname, 'public')
 
 const clickJs = fs.readFileSync(path.join(publicFolder, 'click.js'), 'utf8')
@@ -56,9 +59,8 @@ fastify.addHook('preHandler', (request, reply, done) => {
 })
 
 fastify.get('/click.js', async (request, reply) => {
-  setTimeout(() => {
-    reply.type('text/javascript').send(clickJs)
-  }, 2000)
+  await sleep(2000)
+  reply.type('text/javascript').send(clickJs)
 })
 
 fastify.post('/login', (request, reply) => {
@@ -232,10 +234,16 @@ fastify.post('/calculate', (request, reply) => {
   throw new Error(`Unsupported operation: ${operation}`)
 })
 
+fastify.post('/add-item', (req, reply) => {
+  console.log('adding item request')
+  console.log(req.body)
+  reply.code(200)
+})
+
 // Run the server!
 const start = async () => {
   try {
-    await fastify.listen(4200)
+    await fastify.listen({ port: 4200 })
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
