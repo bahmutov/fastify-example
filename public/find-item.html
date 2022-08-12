@@ -14,27 +14,6 @@
     <h3>Find scraped item</h3>
     <input id="item-text" />
     <div id="output" />
-    <script>
-      document.getElementById('item-text').addEventListener('change', (e) => {
-        const text = e.target.value
-        console.log('looking for "%s"', text)
-        fetch('/find-item/' + encodeURIComponent(text)).then((r) => {
-          if (r.ok) {
-            return r
-              .json()
-              .then((j) => j.found)
-              .then((item) => {
-                document.getElementById('output').innerHTML = `
-                  <div>${item.name} price <span class="price">$${item.price}</span></div>
-                `
-              })
-          } else {
-            document.getElementById('output').innerHTML = `
-              <div class="not-found">Nothing found</div>
-            `
-          }
-        })
-      })
-    </script>
+    <script src="find-item.js"></script>
   </body>
 </html>

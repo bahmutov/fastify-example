@@ -312,6 +312,7 @@ fastify.get('/find-item/:text', (req, reply) => {
     return reply.code(404).send({ found: null })
   }
 
+  console.log('✅ found it "%s"', item.name)
   reply.send({ found: item })
 })
 
