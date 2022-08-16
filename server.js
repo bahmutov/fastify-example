@@ -254,7 +254,7 @@ fastify.post('/add-item', (req, reply) => {
   `)
 
   // for real
-  const maxDelay = 60_000
+  const maxDelay = 59_000
   // during development
   // const maxDelay = 1_000
 
