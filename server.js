@@ -9,6 +9,9 @@ const fastify = require('fastify')({ logger: true })
 // https://github.com/fastify/fastify-formbody
 fastify.register(require('@fastify/formbody'))
 
+// https://github.com/fastify/fastify-multipart
+fastify.register(require('@fastify/multipart'))
+
 const publicFolder = path.join(__dirname, 'public')
 
 const clickJs = fs.readFileSync(path.join(publicFolder, 'click.js'), 'utf8')
@@ -314,6 +317,28 @@ fastify.get('/find-item/:text', (req, reply) => {
 
   console.log('✅ found it "%s"', item.name)
   reply.send({ found: item })
+})
+
+fastify.post('/submit-form', async (req, reply) => {
+  const parts = req.parts()
+  const values = {}
+  for await (const part of parts) {
+    if (part.file) {
+      console.log('file', part.filename)
+    } else {
+      values[part.fieldname] = part.value
+      console.log('%s=%s', part.fieldname, part.value)
+    }
+  }
+
+  reply.type('text/html').send(stripIndent`
+    <body>
+      <h3>Thank you for your submission</h3>
+      <p>You entered ${Object.entries(values)
+        .map(([name, value]) => `<span data-${name}>${value}</span>`)
+        .join(', ')}</p>
+    </body>
+  `)
 })
 
 // Run the server!
