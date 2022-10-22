@@ -341,6 +341,41 @@ fastify.post('/submit-form', async (req, reply) => {
   `)
 })
 
+fastify.post('/upload-profile-picture', async (req, reply) => {
+  // const parts = req.parts()
+  // const values = {}
+  // for await (const part of parts) {
+  //   if (part.file) {
+  //     console.log('file', part)
+  //     // const pic = await part.file()
+  //     // console.log('pic')
+  //     // console.log(pic)
+  //   } else {
+  //     values[part.fieldname] = part.value
+  //     console.log('%s=%s', part.fieldname, part.value)
+  //   }
+  // }
+  const data = await req.file()
+  console.log('file', data.mimetype, data.filename)
+  const buf = await data.toBuffer()
+  const base64 = buf.toString('base64')
+  // console.log(base64)
+  const src = `data:${data.mimetype};base64,${base64}`
+
+  const values = {
+    username: 'test',
+  }
+  console.log('sending upload profile picture response')
+  reply.type('text/html').send(stripIndent`
+    <body>
+      <h3>Updated profile picture for <span data-username>${values.username}</span></h3>
+      <p>
+        <img src="${src}" alt="Profile picture" />
+      </p>
+    </body>
+  `)
+})
+
 // Run the server!
 const start = async () => {
   try {

@@ -1,0 +1,13 @@
+<body>
+  <p>Upload profile picture</p>
+  <form
+    id="upload"
+    action="/upload-profile-picture"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <p><input type="text" name="username" required /></p>
+    <p><input type="file" name="pic" accept="image/png" required /></p>
+    <p><button type="submit">Submit</button></p>
+  </form>
+</body>
