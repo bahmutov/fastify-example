@@ -199,6 +199,31 @@ fastify.get('/all-fruits', async (request, reply) => {
 // this response never finishes
 fastify.get('/fruit-long', (request, reply) => {})
 
+// JSON api endpoint
+fastify.get('/api-jsonp', (request, reply) => {
+  console.log(request.query)
+  const callbackName = request.query.callback
+  if (!callbackName) {
+    throw new Error('Missing JSONP callback name')
+  }
+
+  const list = [
+    {
+      name: 'Joe',
+    },
+    {
+      name: 'Mary',
+    },
+  ]
+  const jsText = `
+    ${callbackName}(${JSON.stringify(list)})
+  `
+
+  reply
+    .header('content-type', 'application/x-javascript; charset=utf-8')
+    .send(jsText)
+})
+
 // always returns the same object
 fastify.get('/sale', async (request, reply) => {
   return {
