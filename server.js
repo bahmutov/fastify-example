@@ -24,6 +24,7 @@ const unreliableDoc = fs.readFileSync(
   path.join(publicFolder, 'unreliable.html'),
   'utf8',
 )
+const tigerImage = fs.readFileSync(path.join(publicFolder, 'tiger.png'))
 
 function isMobile(headers) {
   return headers['user-agent'].includes('Mobile')
@@ -250,6 +251,12 @@ fastify.get('/random-digit', (request, reply) => {
   return {
     n,
   }
+})
+
+fastify.get('/tiger-octet', (request, reply) => {
+  return reply
+    .header('content-type', 'application/octet-stream')
+    .send(tigerImage)
 })
 
 fastify.post('/calculate', (request, reply) => {

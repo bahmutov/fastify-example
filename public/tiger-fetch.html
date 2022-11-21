@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      img {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <img id="tiger" />
+    <script>
+      fetch('/tiger-octet')
+        .then((r) => r.blob())
+        .then((blob) => {
+          const url = URL.createObjectURL(blob)
+          const img = document.getElementById('tiger')
+          img.src = url
+          img.onload = (e) => URL.revokeObjectURL(url)
+        })
+    </script>
+  </body>
+</html>
