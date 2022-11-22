@@ -408,6 +408,17 @@ fastify.post('/upload-profile-picture', async (req, reply) => {
   `)
 })
 
+// several redirects
+fastify.get('/short-url', (request, reply) => {
+  reply.redirect('/helper-shortener')
+})
+fastify.get('/helper-shortener', (request, reply) => {
+  reply.redirect('/server-page')
+})
+fastify.get('/server-page', (request, reply) => {
+  reply.redirect('/redirected.html')
+})
+
 // Run the server!
 const start = async () => {
   try {
