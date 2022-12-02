@@ -1,0 +1,32 @@
+<body>
+  <h1>Delayed</h1>
+  <p>
+    This page makes an Ajax call after one second, then randomly delays
+    rendering the results for up to 2 seconds.
+  </p>
+  <p>Picked a random fruit: <span id="fruit">loading...</span></p>
+  <script>
+    function getFruit() {
+      fetch('/fruit')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`)
+          }
+          return response.json()
+        })
+        .then((data) => {
+          // render the fetched fruit after some delay
+          const delay = Math.random() * 1000 + 1000
+          setTimeout(() => {
+            document.getElementById('fruit').innerText = data.fruit
+          }, delay)
+        })
+        .catch((err) => {
+          console.error('error fetching fruit')
+          console.error(err)
+          document.getElementById('fruit').innerText = err.message
+        })
+    }
+    setTimeout(getFruit, 1000)
+  </script>
+</body>
