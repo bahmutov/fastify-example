@@ -374,24 +374,10 @@ fastify.post('/submit-form', async (req, reply) => {
 })
 
 fastify.post('/upload-profile-picture', async (req, reply) => {
-  // const parts = req.parts()
-  // const values = {}
-  // for await (const part of parts) {
-  //   if (part.file) {
-  //     console.log('file', part)
-  //     // const pic = await part.file()
-  //     // console.log('pic')
-  //     // console.log(pic)
-  //   } else {
-  //     values[part.fieldname] = part.value
-  //     console.log('%s=%s', part.fieldname, part.value)
-  //   }
-  // }
   const data = await req.file()
   console.log('file', data.mimetype, data.filename)
   const buf = await data.toBuffer()
   const base64 = buf.toString('base64')
-  // console.log(base64)
   const src = `data:${data.mimetype};base64,${base64}`
 
   const values = {
@@ -404,6 +390,24 @@ fastify.post('/upload-profile-picture', async (req, reply) => {
       <p>
         <img src="${src}" alt="Profile picture" />
       </p>
+    </body>
+  `)
+})
+
+fastify.post('/upload-json-file', async (req, reply) => {
+  const data = await req.file()
+  console.log('file', data.mimetype, data.filename)
+  const buf = await data.toBuffer()
+  const str = buf.toString()
+  const json = JSON.parse(str)
+  console.log('=== uploaded JSON ===')
+  console.log(json)
+
+  reply.type('text/html').send(stripIndent`
+    <body>
+      <h2>Uploaded JSON file</h3>
+      <h3 data-cy="filename">${data.filename}</h2>
+      <code><pre>${str}</pre></code>
     </body>
   `)
 })
