@@ -10,7 +10,16 @@ const fastify = require('fastify')({ logger: true })
 fastify.register(require('@fastify/formbody'))
 
 // https://github.com/fastify/fastify-multipart
-fastify.register(require('@fastify/multipart'))
+fastify.register(require('@fastify/multipart'), {
+  limits: {
+    fieldNameSize: 100, // Max field name size in bytes
+    fieldSize: 100, // Max field value size in bytes
+    fields: 10, // Max number of non-file fields
+    fileSize: 1000000, // For multipart forms, the max file size in bytes
+    files: 2, // Max number of file fields
+    headerPairs: 2000, // Max number of header key=>value pairs
+  },
+})
 
 const publicFolder = path.join(__dirname, 'public')
 
@@ -408,6 +417,44 @@ fastify.post('/upload-json-file', async (req, reply) => {
       <h2>Uploaded JSON file</h3>
       <h3 data-cy="filename">${data.filename}</h2>
       <code><pre>${str}</pre></code>
+    </body>
+  `)
+})
+
+fastify.post('/upload-files', async (req, reply) => {
+  const parts = req.files()
+
+  const uploadedJsonFiles = []
+  for await (const part of parts) {
+    console.log('file', part.mimetype, part.filename)
+    const buf = await part.toBuffer()
+    if (part.mimetype === 'application/json') {
+      const str = buf.toString()
+      const json = JSON.parse(str)
+      console.log('=== uploaded JSON ===')
+      console.log(json)
+      uploadedJsonFiles.push({
+        filename: part.filename,
+        str,
+        json,
+      })
+    }
+  }
+
+  console.log('sending html')
+  reply.type('text/html').send(stripIndent`
+    <body>
+      <h2>Uploaded ${uploadedJsonFiles.length} JSON files</h3>
+      <ol>
+        ${uploadedJsonFiles.map(
+          (part) => stripIndent`
+          <li data-cy="file">
+            <h3 data-cy="filename">${part.filename}</h2>
+            <code><pre>${part.str}</pre></code>
+          </li>
+        `,
+        )}
+      </ol>
     </body>
   `)
 })
