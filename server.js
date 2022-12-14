@@ -430,6 +430,7 @@ fastify.post('/upload-files', async (req, reply) => {
     const buf = await part.toBuffer()
     if (part.mimetype === 'application/json') {
       const str = buf.toString()
+      console.log('raw string:', str)
       const json = JSON.parse(str)
       console.log('=== uploaded JSON ===')
       console.log(json)

@@ -39,6 +39,24 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
     }
   }
 
+  function FileDropHandler(e) {
+    console.log(e)
+    // cancel event and hover styling
+    FileDragHover(e)
+
+    // fetch FileList object
+    const files = e.dataTransfer.files
+    console.log(files)
+
+    const fileselect = $id('fileselect')
+    fileselect.files = files
+
+    // process all File objects
+    for (var i = 0, f; (f = files[i]); i++) {
+      ParseFile(f)
+    }
+  }
+
   // output file information
   function ParseFile(file) {
     Output(
@@ -67,7 +85,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
       // file drop
       filedrag.addEventListener('dragover', FileDragHover, false)
       filedrag.addEventListener('dragleave', FileDragHover, false)
-      filedrag.addEventListener('drop', FileSelectHandler, false)
+      filedrag.addEventListener('drop', FileDropHandler, false)
       filedrag.style.display = 'block'
 
       // remove submit button
