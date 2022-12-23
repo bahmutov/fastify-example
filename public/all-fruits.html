@@ -1,0 +1,15 @@
+<body>
+  <h1>All fruits</h1>
+  <ol id="fruits"></ol>
+  <script>
+    fetch('/all-fruits')
+      .then((r) => r.json())
+      .then((fruits) => {
+        console.table(fruits)
+        const list = document.getElementById('fruits')
+        list.innerHTML = fruits
+          .map((item) => `<li>${item.fruit}</li>`)
+          .join('\n')
+      })
+  </script>
+</body>
