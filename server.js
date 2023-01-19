@@ -481,3 +481,11 @@ const start = async () => {
   }
 }
 start()
+
+async function closeServer(signal) {
+  console.log(`closing the server with the signal ${signal}`)
+  await fastify.close()
+  process.kill(process.pid, signal)
+}
+process.once('SIGINT', closeServer)
+process.once('SIGTERM', closeServer)
