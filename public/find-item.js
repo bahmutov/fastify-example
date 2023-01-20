@@ -5,7 +5,9 @@ document.getElementById('item-text').addEventListener('change', (e) => {
   }
   console.log('looking for "%s"', text)
   document.getElementById('output').innerHTML = '<div>Looking...</div>'
-  fetch('/find-item/' + encodeURIComponent(text)).then((r) => {
+
+  const url = '/find-item/' + encodeURIComponent(text)
+  fetch(url).then((r) => {
     if (r.ok) {
       return r
         .json()

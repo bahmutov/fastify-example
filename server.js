@@ -302,7 +302,9 @@ fastify.post('/add-item', (req, reply) => {
   // during development
   // const maxDelay = 1_000
 
-  const addingDelay = Math.random() * maxDelay
+  const addingDelay =
+    'delay' in req.body ? Number(req.body.delay) : Math.random() * maxDelay
+
   console.log(
     'will add %o to the database after %s',
     item,
@@ -312,7 +314,8 @@ fastify.post('/add-item', (req, reply) => {
     console.log('adding the item %o to the database', item)
     items.push(item)
 
-    const scrapingDelay = Math.random() * maxDelay
+    const scrapingDelay =
+      'delay' in req.body ? Number(req.body.delay) : Math.random() * maxDelay
     console.log(
       'will scrape the item %o after %s so it can be found',
       item,
@@ -344,6 +347,22 @@ fastify.get('/items/:name', (req, reply) => {
       <p>Price ${item.price}</p>
     </body>
   `)
+})
+
+fastify.get('/find-item/:name/price', (req, reply) => {
+  console.log('fetching the item\'s price for "%s"', req.params.name)
+
+  const item = items.find((item) => item.name === req.params.name)
+  if (!item) {
+    return reply.type('text/html').code(404).send(stripIndent`
+        <body>
+          <h3>Item not found</h3>
+          <p>Cannot find item with name "${req.params.name}</p>
+        </body>
+      `)
+  }
+
+  reply.send({ price: item.price })
 })
 
 fastify.get('/find-item/:text', (req, reply) => {
