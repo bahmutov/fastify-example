@@ -145,6 +145,14 @@ fastify.get('/unreliable', (request, reply) => {
   }
 })
 
+fastify.post('/slow/:id', (request, reply) => {
+  console.log('server is slowing processing request %s 🐢', request.params.id)
+  setTimeout(() => {
+    console.log('sending the slow response %s', request.params.id)
+    reply.send({ ok: true, id: request.params.id })
+  }, 10_000)
+})
+
 fastify.register(require('@fastify/static'), {
   root: publicFolder,
 })
