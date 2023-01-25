@@ -62,11 +62,11 @@ fastify.addHook('preHandler', (request, reply, done) => {
   Object.keys(request.headers).forEach((key) => {
     if (key.startsWith('x')) {
       console.log(
-        '%s %s with header %s: %s',
-        request.method,
-        request.url,
+        '🎩 %s: %s %s %s',
         key,
         request.headers[key],
+        request.method,
+        request.url,
       )
     }
   })
