@@ -387,6 +387,20 @@ fastify.get('/find-item/:text', (req, reply) => {
   reply.send({ found: item })
 })
 
+fastify.post('/submit-urlencoded', async (req, reply) => {
+  const values = req.body
+  console.log('received values %o', values)
+  // generate the HTML response page
+  reply.type('text/html').send(stripIndent`
+    <body>
+      <h3>Thank you for your submission</h3>
+      <p>You entered ${Object.entries(values)
+        .map(([name, value]) => `<span data-${name}>${value}</span>`)
+        .join(', ')}</p>
+    </body>
+  `)
+})
+
 fastify.post('/submit-form', async (req, reply) => {
   const parts = req.parts()
   const values = {}
