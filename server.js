@@ -38,6 +38,10 @@ const csrfDoc = fs.readFileSync(
   path.join(publicFolder, 'csrf-form.html'),
   'utf8',
 )
+const csrfCookieDoc = fs.readFileSync(
+  path.join(publicFolder, 'csrf-form-cookie.html'),
+  'utf8',
+)
 const tigerImage = fs.readFileSync(path.join(publicFolder, 'tiger.png'))
 
 function isMobile(headers) {
@@ -52,6 +56,9 @@ fastify.register(require('@fastify/cookie'), {
   secret: 'my-secret-for-signing-cookies', // for cookies signature
   parseOptions: {}, // options for parsing cookies
 })
+
+// https://github.com/fastify/csrf-protection
+fastify.register(require('@fastify/csrf-protection'))
 
 // if the sender sends "request-id" header
 // return it as response header "x-request-id"
@@ -102,6 +109,8 @@ fastify.post('/login', (request, reply) => {
   }
 })
 
+// CSRF form protected by the hidden input field
+
 // current CSRF tokens
 const csrfTokens = {}
 
@@ -145,6 +154,35 @@ fastify.post('/submit-csrf-form', (request, reply) => {
   `
 
   return reply.type('text/html').send(registeredPage)
+})
+
+// CSRF form protected by CSRF cookie
+
+fastify.route({
+  method: 'GET',
+  path: '/csrf-form-cookie.html',
+  handler: async (request, reply) => {
+    const token = await reply.generateCsrf()
+    console.log('returning csrf-form-cookie.html with token', token)
+    return reply.type('text/html').send(csrfCookieDoc)
+  },
+})
+
+fastify.route({
+  method: 'POST',
+  path: '/submit-csrf-form-cookie',
+  onRequest: fastify.csrfProtection,
+  handler: (request, reply) => {
+    const { username } = request.body
+    console.log('POST /submit-csrf-form %s', username)
+    const registeredPage = stripIndent`
+    <body>
+      <p>Registered user <b data-cy="username">${username}</b>
+    </body>
+  `
+
+    return reply.type('text/html').send(registeredPage)
+  },
 })
 
 fastify.get('/', (request, reply) => {
