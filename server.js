@@ -2,6 +2,7 @@ const { stripIndent } = require('common-tags')
 const humanizeDuration = require('humanize-duration')
 const path = require('path')
 const fs = require('fs')
+const crypto = require('crypto')
 const FastifySSEPlugin = require('fastify-sse-v2')
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true })
@@ -31,6 +32,10 @@ const indexMobileDoc = fs.readFileSync(
 )
 const unreliableDoc = fs.readFileSync(
   path.join(publicFolder, 'unreliable.html'),
+  'utf8',
+)
+const csrfDoc = fs.readFileSync(
+  path.join(publicFolder, 'csrf-form.html'),
   'utf8',
 )
 const tigerImage = fs.readFileSync(path.join(publicFolder, 'tiger.png'))
@@ -95,6 +100,49 @@ fastify.post('/login', (request, reply) => {
     console.log('invalid credentials')
     reply.code(401)
   }
+})
+
+// current CSRF tokens
+const csrfTokens = {}
+
+fastify.get('/csrf-form.html', (request, reply) => {
+  const csrfToken = crypto.randomBytes(32).toString('hex')
+  console.log('sending csrf-form.html page with CSRF token %s', csrfToken)
+  csrfTokens[csrfToken] = true
+  const html = csrfDoc.replace('%%CSRF_TOKEN_HERE%%', csrfToken)
+  return reply.type('text/html').send(html)
+})
+
+fastify.post('/submit-csrf-form', (request, reply) => {
+  console.log('login with body %o', request.body)
+  const { username, csrf } = request.body
+  if (!csrf) {
+    const message = 'Bad or missing CSRF value'
+    return reply.code(403, message).type('text/html').send(stripIndent`
+      <body data-cy="error">
+        ${message}
+      </body>
+    `)
+  }
+  if (!csrfTokens[csrf]) {
+    const message = 'Invalid CSRF value'
+    return reply.code(403, message).type('text/html').send(stripIndent`
+      <body data-cy="error">
+        ${message}
+      </body>
+    `)
+  }
+  console.log('valid CSRF token %s', csrf)
+  // remove the used up CSRF token to prevent multiple submissions
+  delete csrfTokens[csrf]
+
+  const registeredPage = stripIndent`
+    <body>
+      <p>Registered user <b data-cy="username">${username}</b>
+    </body>
+  `
+
+  return reply.type('text/html').send(registeredPage)
 })
 
 fastify.get('/', (request, reply) => {
