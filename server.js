@@ -174,6 +174,17 @@ fastify.route({
   onRequest: fastify.csrfProtection,
   handler: (request, reply) => {
     const { username } = request.body
+    const csrf = request.cookies._csrf
+    if (!csrf) {
+      const message = 'Bad or missing CSRF value'
+      console.error(message)
+      return reply.code(403, message).type('text/html').send(stripIndent`
+      <body data-cy="error">
+        ${message}
+      </body>
+    `)
+    }
+
     console.log('POST /submit-csrf-form %s', username)
     const registeredPage = stripIndent`
     <body>
