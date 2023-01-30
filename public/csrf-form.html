@@ -1,11 +1,13 @@
-<body>
-  <h2>Register new user</h2>
-  <form method="POST" action="/submit-csrf-form">
-    <label for="username">Username:</label><br />
-    <input type="text" name="username" />
-    <input type="hidden" name="csrf" value="%%CSRF_TOKEN_HERE%%" />
-    <br />
-    <hr />
-    <button type="submit">Register</button>
-  </form>
-</body>
+<html>
+  <body>
+    <h2>Register new user</h2>
+    <form method="POST" action="/submit-csrf-form">
+      <label for="username">Username:</label><br />
+      <input type="text" name="username" />
+      <input type="hidden" name="csrf" value="%%CSRF_TOKEN_HERE%%" />
+      <br />
+      <hr />
+      <button type="submit">Register</button>
+    </form>
+  </body>
+</html>

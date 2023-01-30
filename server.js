@@ -114,10 +114,11 @@ fastify.get('/csrf-form.html', (request, reply) => {
 })
 
 fastify.post('/submit-csrf-form', (request, reply) => {
-  console.log('login with body %o', request.body)
+  console.log('submit-csrf-form %o', request.body)
   const { username, csrf } = request.body
   if (!csrf) {
     const message = 'Bad or missing CSRF value'
+    console.error(message)
     return reply.code(403, message).type('text/html').send(stripIndent`
       <body data-cy="error">
         ${message}
@@ -126,6 +127,7 @@ fastify.post('/submit-csrf-form', (request, reply) => {
   }
   if (!csrfTokens[csrf]) {
     const message = 'Invalid CSRF value'
+    console.error(message)
     return reply.code(403, message).type('text/html').send(stripIndent`
       <body data-cy="error">
         ${message}
