@@ -244,6 +244,14 @@ fastify.get('/unreliable', (request, reply) => {
   }
 })
 
+fastify.get('/delay/:ms', (request, reply) => {
+  const ms = request.params.ms || 1000
+  setTimeout(() => {
+    console.log('sending after delay %d', ms)
+    reply.send({ ok: true })
+  }, ms)
+})
+
 fastify.post('/slow/:id', (request, reply) => {
   console.log('server is slowing processing request %s 🐢', request.params.id)
   setTimeout(() => {
