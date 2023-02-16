@@ -631,6 +631,39 @@ fastify.get('/server-page', (request, reply) => {
   reply.redirect('/redirected.html')
 })
 
+function getRoundedDate(d, minutes = 1) {
+  const ms = 1000 * 60 * minutes // convert minutes to ms
+  const roundedDate = new Date(Math.round(d.getTime() / ms) * ms)
+  return roundedDate
+}
+
+function getDateString(d) {
+  const yyyy = d.getUTCFullYear()
+  const mm = String(d.getUTCMonth() + 1).padStart(2, '0')
+  const dd = d.getUTCDate()
+  const hh = d.getUTCHours()
+  const min = d.getUTCMinutes()
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}`
+}
+
+// replies with the page with UTC timestamp rounded to a minute
+// includes the precise timestamp in the response header "x-time-check"
+fastify.get('/time-check', (req, reply) => {
+  const time = new Date()
+  const timeString = time.toUTCString()
+  const roundedTime = getRoundedDate(time)
+  const roundedString = getDateString(roundedTime)
+  console.log('time check %s', timeString)
+  console.log('rounded time %s', roundedString)
+
+  reply.type('text/html').header('x-time-check', timeString).send(stripIndent`
+    <body>
+      <h2>Time Check</h3>
+      <span data-cy="time">${roundedString}</span> GMT
+    </body>
+  `)
+})
+
 // Run the server!
 const start = async () => {
   try {
