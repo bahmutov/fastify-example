@@ -22,6 +22,12 @@ fastify.register(require('@fastify/multipart'), {
   },
 })
 
+// https://www.npmjs.com/package/@fastify/basic-auth
+fastify.register(require('@fastify/basic-auth'), {
+  validate: basicAuthValidate,
+  authenticate: true,
+})
+
 const publicFolder = path.join(__dirname, 'public')
 
 const clickJs = fs.readFileSync(path.join(publicFolder, 'click.js'), 'utf8')
@@ -629,6 +635,31 @@ fastify.get('/helper-shortener', (request, reply) => {
 })
 fastify.get('/server-page', (request, reply) => {
   reply.redirect('/redirected.html')
+})
+
+// https://www.npmjs.com/package/@fastify/basic-auth
+function basicAuthValidate(username, password, req, reply, done) {
+  if (username === 'test_cy' && password === 'secure12$1') {
+    done()
+  } else {
+    done(new Error('Wrong basic auth'))
+  }
+}
+
+fastify.after(() => {
+  fastify.route({
+    method: 'GET',
+    url: '/protected',
+    onRequest: fastify.basicAuth,
+    handler: async (req, reply) => {
+      console.log('sending protected page')
+      return reply.type('text/html').send(stripIndent`
+        <body>
+          <h1>Secret stuff</h1>
+        </body>
+      `)
+    },
+  })
 })
 
 function getRoundedDate(d, minutes = 1) {
