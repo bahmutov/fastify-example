@@ -271,6 +271,7 @@ fastify.register(require('@fastify/static'), {
 })
 
 const fruits = ['Apples', 'Oranges', 'Bananas', 'Pears', 'Grapes']
+const prices = [1.99, 2.59, 1.29, 2.99, 2.89]
 // returns each fruit one by one, round-robin style
 let index = 0
 
@@ -325,6 +326,18 @@ fastify.get('/fruits', async (request, reply) => {
 // returns all possible fruits
 fastify.get('/all-fruits', async (request, reply) => {
   return fruits.map((fruit, k) => ({ fruit, k }))
+})
+
+fastify.get('/fruits/price/:fruit', async (request, reply) => {
+  console.log('returning price for %s', request.params.fruit)
+  const index = fruits.findIndex((fruit) => fruit === request.params.fruit)
+  if (index < 0) {
+    console.log('could not find fruit', request.params.fruit)
+    return reply.code(404).send()
+  }
+  const body = { fruit: request.params.fruit, price: prices[index] }
+  console.log(body)
+  return body
 })
 
 // this response never finishes
