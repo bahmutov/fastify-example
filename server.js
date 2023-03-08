@@ -684,7 +684,7 @@ function getRoundedDate(d, minutes = 1) {
 function getDateString(d) {
   const yyyy = d.getUTCFullYear()
   const mm = String(d.getUTCMonth() + 1).padStart(2, '0')
-  const dd = d.getUTCDate()
+  const dd = String(d.getUTCDate()).padStart(2, '0')
   const hh = d.getUTCHours()
   const min = d.getUTCMinutes()
   return `${yyyy}-${mm}-${dd} ${hh}:${min}`
