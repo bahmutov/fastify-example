@@ -391,6 +391,9 @@ fastify.post('/track', (request, reply) => {
 fastify.get('/random-digit', (request, reply) => {
   const n = parseInt(String(Math.random()).slice(2, 3))
   console.log('returning random digit %d', n)
+
+  reply.header('Access-Control-Allow-Origin', '*')
+  reply.header('Access-Control-Allow-Methods', 'GET')
   return {
     n,
   }
