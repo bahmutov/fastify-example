@@ -388,6 +388,13 @@ fastify.post('/track', (request, reply) => {
   return { ok: true }
 })
 
+fastify.options('/random-digit', (request, reply) => {
+  reply.header('Access-Control-Allow-Origin', '*')
+  reply.header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+  reply.header('Access-Control-Allow-Headers', '*')
+  return {}
+})
+
 fastify.get('/random-digit', (request, reply) => {
   const n = parseInt(String(Math.random()).slice(2, 3))
   const delay = Number(request.headers['x-delay'])
@@ -401,7 +408,7 @@ fastify.get('/random-digit', (request, reply) => {
   } else {
     console.log('will return random digit %d after %dms', n, delay)
     reply.header('Access-Control-Allow-Origin', '*')
-    reply.header('Access-Control-Allow-Methods', 'GET')
+    reply.header('Access-Control-Allow-Methods', 'GET, OPTIONS')
     setTimeout(() => {
       reply.send({ n })
     }, delay)
