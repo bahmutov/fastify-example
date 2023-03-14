@@ -390,12 +390,21 @@ fastify.post('/track', (request, reply) => {
 
 fastify.get('/random-digit', (request, reply) => {
   const n = parseInt(String(Math.random()).slice(2, 3))
-  console.log('returning random digit %d', n)
-
-  reply.header('Access-Control-Allow-Origin', '*')
-  reply.header('Access-Control-Allow-Methods', 'GET')
-  return {
-    n,
+  const delay = Number(request.headers['x-delay'])
+  if (isNaN(delay)) {
+    console.log('returning random digit %d', n)
+    reply.header('Access-Control-Allow-Origin', '*')
+    reply.header('Access-Control-Allow-Methods', 'GET')
+    return {
+      n,
+    }
+  } else {
+    console.log('will return random digit %d after %dms', n, delay)
+    reply.header('Access-Control-Allow-Origin', '*')
+    reply.header('Access-Control-Allow-Methods', 'GET')
+    setTimeout(() => {
+      reply.send({ n })
+    }, delay)
   }
 })
 
