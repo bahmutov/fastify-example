@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- UIkit CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/uikit@3.16.15/dist/css/uikit.min.css"
+    />
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.15/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.15/dist/js/uikit-icons.min.js"></script>
+  </head>
+  <body>
+    <div class="uk-section uk-section-primary uk-padding">
+      <form
+        class="uk-form-horizontal uk-margin-large"
+        method="POST"
+        action="/my-form"
+      >
+        <div class="uk-margin">
+          <label class="uk-form-label" for="form-horizontal-text"
+            >Vegetable</label
+          >
+          <div class="uk-form-controls">
+            <input
+              class="uk-input"
+              id="form-horizontal-text"
+              type="text"
+              placeholder="your favorite vegetable name"
+              name="vegetable"
+            />
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <label class="uk-form-label" for="form-horizontal-select"
+            >Select</label
+          >
+          <div class="uk-form-controls">
+            <select
+              class="uk-select"
+              id="form-horizontal-select"
+              name="preparation"
+            >
+              <option>fresh</option>
+              <option>pickled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <div class="uk-form-label">Are you eating it right now?</div>
+          <div class="uk-form-controls uk-form-controls-text">
+            <label
+              ><input class="uk-radio" type="radio" name="eating" value="yes" />
+              Yes</label
+            ><br />
+            <label
+              ><input class="uk-radio" type="radio" name="eating" value="no" />
+              No</label
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
