@@ -4,6 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const crypto = require('crypto')
 const FastifySSEPlugin = require('fastify-sse-v2')
+const { buildEtag } = require('./src/etag')
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true })
 
@@ -342,6 +343,28 @@ fastify.get('/fruits/price/:fruit', async (request, reply) => {
 
 // this response never finishes
 fastify.get('/fruit-long', (request, reply) => {})
+
+// cached list of todos
+const todos = [
+  {
+    id: '8166',
+    title: 'Write code',
+    completed: false,
+  },
+]
+fastify.route({
+  method: 'GET',
+  path: '/todos',
+  onSend: buildEtag(),
+  handler(req, reply) {
+    console.log('sending todos')
+    return todos
+  },
+})
+fastify.post('/todos', (request, reply) => {
+  console.log('adding new todo', request.body)
+  reply.status(201)
+})
 
 // JSON api endpoint
 fastify.get('/api-jsonp', (request, reply) => {
