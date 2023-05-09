@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Periodic ping</title>
+  </head>
+  <body>
+    <h1>Periodic ping</h1>
+    <p>Press the button to start pinging the backend every 30 seconds</p>
+    <button id="ping">Start pinging</button>
+    <output id="result" />
+    <script>
+      document.getElementById('ping').addEventListener('click', () => {
+        const output = document.getElementById('result')
+        setInterval(() => {
+          fetch('/random-digit')
+            .then((r) => r.json())
+            .then((data) => data.n)
+            .then((n) => {
+              output.innerText = n
+            })
+        }, 30_000)
+      })
+    </script>
+  </body>
+</html>
