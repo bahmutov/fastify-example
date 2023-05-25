@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>Offline</title>
+    <style>
+      #network-status {
+        position: absolute;
+        bottom: 2em;
+        right: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Online / Offline</h2>
+    <aside id="network-status"></aside>
+    <script>
+      const updateNetworkStatus = () => {
+        console.log('online status', window.navigator.onLine)
+        const el = document.getElementById('network-status')
+        const text = window.navigator.onLine ? '🟢 online' : '🟥 offline'
+
+        el.innerText = text
+      }
+
+      updateNetworkStatus()
+      window.addEventListener('offline', updateNetworkStatus)
+      window.addEventListener('online', updateNetworkStatus)
+    </script>
+  </body>
+</html>
