@@ -1,0 +1,28 @@
+<html>
+  <body>
+    <h1>CORS example</h1>
+    <button id="cors">Make a CORS request</button>
+    <div id="result"></div>
+    <script>
+      document.getElementById('cors').addEventListener('click', () => {
+        const result = document.getElementById('result')
+        result.innerText = 'fetching...'
+        fetch('http://localhost:6006', {
+          method: 'get',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((r) => {
+            r.json().then((data) => {
+              result.innerText = `Hello ${data.hello}`
+            })
+          })
+          .catch((err) => {
+            result.innerText = err.message
+          })
+      })
+    </script>
+  </body>
+</html>

@@ -17,6 +17,15 @@ $ npm start
 
 Open the `localhost:4200`
 
+## CORS
+
+There is a separate small server for testing browser CORS
+
+```
+$ npm run start:cors
+# check localhost:6006
+```
+
 ## Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2022
