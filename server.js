@@ -438,6 +438,16 @@ fastify.get('/random-digit', (request, reply) => {
   }
 })
 
+fastify.get('/random-float', (request, reply) => {
+  const n = Math.random()
+  console.log('returning random float %o', n)
+  reply.header('Access-Control-Allow-Origin', '*')
+  reply.header('Access-Control-Allow-Methods', 'GET')
+  return {
+    n,
+  }
+})
+
 fastify.get('/tiger-octet', (request, reply) => {
   return reply
     .header('content-type', 'application/octet-stream')

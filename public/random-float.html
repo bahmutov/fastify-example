@@ -1,0 +1,13 @@
+<body>
+  <h1>Random Float</h1>
+  <div id="number" />
+  <script>
+    fetch('/random-float')
+      .then((r) => r.json())
+      .then((data) => data.n)
+      .then((n) => {
+        console.log('server sent', n)
+        document.getElementById('number').innerText = n.toFixed(1)
+      })
+  </script>
+</body>
