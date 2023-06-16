@@ -704,6 +704,7 @@ fastify.get('/server-page', (request, reply) => {
 
 // https://www.npmjs.com/package/@fastify/basic-auth
 function basicAuthValidate(username, password, req, reply, done) {
+  console.log('checking basic auth %s:%s', username, password)
   if (username === 'test_cy' && password === 'secure12$1') {
     done()
   } else {
