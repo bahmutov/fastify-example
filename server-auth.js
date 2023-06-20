@@ -26,9 +26,11 @@ app.post('/login', (request, reply) => {
   console.log('%o', request.body)
 
   if (password === 'abcdef') {
-    console.log('%s login successful, redirecting home', email)
-    request.session.authenticated = true
-    reply.redirect('/')
+    console.log('%s login successful, redirecting home after 3 seconds', email)
+    setTimeout(() => {
+      request.session.authenticated = true
+      reply.redirect('/')
+    }, 3000)
   } else {
     console.log('login for %s failed', email)
     reply.code(302).redirect('/login')
