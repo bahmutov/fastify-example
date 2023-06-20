@@ -35,6 +35,17 @@ app.post('/login', (request, reply) => {
   }
 })
 
+// an authenticated route
+app.post('/info', (request, reply) => {
+  if (request.session.authenticated) {
+    console.log('returning info for authenticated user')
+    reply.send({ username: 'joe', isAdmin: false })
+  } else {
+    console.log('user is not authenticated, deny')
+    reply.code(401).send({ error: 'Not found' })
+  }
+})
+
 app.get('/', (request, reply) => {
   reply.type('text/html')
   reply.send(defaultPage(request.session.authenticated))
