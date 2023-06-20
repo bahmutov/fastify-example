@@ -43,7 +43,8 @@ app.get('/', (request, reply) => {
 // add a logout route
 app.get('/logout', (request, reply) => {
   if (request.session.authenticated) {
-    request.destroySession((err) => {
+    console.log('removing authenticated session')
+    request.session.destroy((err) => {
       if (err) {
         reply.status(500)
         reply.send('Internal Server Error')
@@ -52,6 +53,7 @@ app.get('/logout', (request, reply) => {
       }
     })
   } else {
+    console.log('not authenticated, returning home page')
     reply.redirect('/')
   }
 })

@@ -7,9 +7,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./server",
-    "watch": "nodemon ./server",
     "start:cors": "node ./server-cors",
-    "start:auth": "node ./server-auth"
+    "start:auth": "node ./server-auth",
+    "watch": "nodemon ./server",
+    "watch:cors": "nodemon ./server-cors",
+    "watch:auth": "nodemon ./server-auth"
   },
   "keywords": [],
   "author": "",
