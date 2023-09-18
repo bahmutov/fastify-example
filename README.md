@@ -10,6 +10,8 @@ This example application is used for the online course [Cypress Network Testing 
 
 ## Install and use
 
+Please use Node version specified in the [.nvmrc](./.nvmrc) file in this repository. If you use [NVM](https://github.com/nvm-sh/nvm), you can simply execute `nvm use` in the current folder before installing and running the server.
+
 ```
 $ npm install
 $ npm start
