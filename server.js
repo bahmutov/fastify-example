@@ -702,6 +702,38 @@ fastify.get('/server-page', (request, reply) => {
   reply.redirect('/redirected.html')
 })
 
+// search "results" used for Bonus 116 lesson
+fastify.get('/api/search/:text', (req, reply) => {
+  console.log('search suggestions for "%s"', req.params.text)
+  if (req.params.text.length === 1) {
+    console.log('returning 7 results')
+    return reply.send({
+      search: req.params.text,
+      suggestions: ['one', 'two', 'three', 'four', 'five', 'six', 'seven'],
+    })
+  }
+  if (req.params.text.length === 2) {
+    console.log('returning 4 results')
+    return reply.send({
+      search: req.params.text,
+      suggestions: ['one', 'two', 'three', 'four'],
+    })
+  }
+  if (req.params.text.length === 3) {
+    console.log('returning 2 results')
+    return reply.send({
+      search: req.params.text,
+      suggestions: ['one', 'two'],
+    })
+  }
+
+  console.log('returning an empty list')
+  return reply.send({
+    search: req.params.text,
+    suggestions: [],
+  })
+})
+
 // https://www.npmjs.com/package/@fastify/basic-auth
 function basicAuthValidate(username, password, req, reply, done) {
   console.log('checking basic auth %s:%s', username, password)

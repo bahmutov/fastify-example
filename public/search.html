@@ -1,0 +1,23 @@
+<html>
+  <body>
+    <h1>Search</h1>
+    <input id="search" type="text" />
+    <br />
+    <ol id="results"></ol>
+    <script>
+      const searchElement = document.getElementById('search')
+      const resultsElement = document.getElementById('results')
+      searchElement.addEventListener('input', (event) => {
+        console.log('searching "%s"', event.target.value)
+        fetch(`/api/search/${event.target.value}`)
+          .then((r) => r.json())
+          .then((data) => {
+            console.log(data)
+            resultsElement.innerHTML = data.suggestions
+              .map((s) => `<li>${s}</li>`)
+              .join('')
+          })
+      })
+    </script>
+  </body>
+</html>
