@@ -1,0 +1,17 @@
+<html>
+  <body>
+    <h1>query</h1>
+    <code><pre id="out"></pre></code>
+    <script>
+      fetch('/sorted?page=2&order[price]=asc&include=details')
+        .then((r) => r.json())
+        .then((response) => {
+          document.getElementById('out').innerText = JSON.stringify(
+            response,
+            null,
+            2,
+          )
+        })
+    </script>
+  </body>
+</html>

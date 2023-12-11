@@ -267,6 +267,12 @@ fastify.post('/slow/:id', (request, reply) => {
   }, 10_000)
 })
 
+fastify.get('/sorted', (request, reply) => {
+  console.log('/sorted with the following query')
+  console.log(request.query)
+  reply.send({ query: request.query })
+})
+
 fastify.register(require('@fastify/static'), {
   root: publicFolder,
 })
