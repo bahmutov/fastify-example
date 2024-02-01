@@ -397,6 +397,13 @@ fastify.get('/api-jsonp', (request, reply) => {
     .send(jsText)
 })
 
+// simply returns the object with all request headers
+fastify.get('/headers', (request, reply) => {
+  console.log('returning headers, here are the request headers')
+  console.log(request.headers)
+  return request.headers
+})
+
 // always returns the same object
 fastify.get('/sale', async (request, reply) => {
   return {
