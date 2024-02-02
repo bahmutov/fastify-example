@@ -1,0 +1,21 @@
+<body>
+  <h1>URL params are changing</h1>
+  <h2>^^^^</h2>
+  <script>
+    const url = encodeURIComponent('/my-profile-page.html')
+    const question = encodeURIComponent('what is the meaning of life?')
+    setTimeout(() => {
+      history.replaceState(null, '', `?callback=${url}`)
+    }, 1000)
+    setTimeout(() => {
+      history.replaceState(null, '', `?callback=${url}&question=${question}`)
+    }, 2000)
+    setTimeout(() => {
+      history.replaceState(
+        null,
+        '',
+        `?callback=${url}&question=${question}&answer=42`,
+      )
+    }, 3000)
+  </script>
+</body>
