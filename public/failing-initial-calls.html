@@ -1,0 +1,21 @@
+<body>
+  <h1>Failing initial calls</h1>
+  <p>
+    This page makes network calls to "/fail-first" endpoint. The first N calls
+    fail, but then the call should succeed.
+  </p>
+  <script>
+    let counter = 0
+    const callTimer = setInterval(() => {
+      counter += 1
+      fetch('/fail-first/' + counter).then((r) => {
+        if (r.ok) {
+          clearInterval(callTimer)
+          document.body.innerHTML += '<p class="success">Call succeeded</p>'
+        } else {
+          document.body.innerHTML += '<p>Call failed</p>'
+        }
+      })
+    }, 1000)
+  </script>
+</body>

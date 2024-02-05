@@ -97,6 +97,16 @@ fastify.get('/click.js', async (request, reply) => {
   reply.type('text/javascript').send(clickJs)
 })
 
+fastify.get('/fail-first/:count', (request) => {
+  const { count } = request.params
+  console.log('fail-first %d', count)
+  if (count > 4) {
+    return { ok: true }
+  } else {
+    throw new Error('fail-first')
+  }
+})
+
 fastify.post('/login', (request, reply) => {
   console.log('login with body %o', request.body)
   const { username, password } = request.body
