@@ -283,6 +283,42 @@ fastify.get('/sorted', (request, reply) => {
   reply.send({ query: request.query })
 })
 
+fastify.get('/with-cookie', (request, reply) => {
+  // fastify send the reply with HTML document
+  // and a cookie set
+  reply.setCookie('custom-page-cookie', 'abc1234', {
+    domain: 'localhost',
+    path: '/',
+    httpOnly: true,
+    signed: false,
+    // do not use "secure: true" because we are on http localhost
+    // secure: true,
+  })
+
+  const filename = path.join(publicFolder, 'with-cookie.html')
+  const html = fs.readFileSync(filename, 'utf-8')
+  return reply.type('text/html').send(html)
+})
+
+fastify.get('/api/with-cookie', (request, reply) => {
+  console.log('api/with-cookie with the following cookies')
+  console.log(request.cookies)
+  console.log('and the headers')
+  console.log(request.headers)
+
+  if (request.cookies['custom-page-cookie'] !== 'abc1234') {
+    console.log('🛑 cookie is missing or invalid')
+    return reply.code(401).send({ error: 'Unauthorized' })
+  }
+  if (request.headers['x-api-key'] !== 'App custom key') {
+    console.log('🛑 api key is missing or invalid')
+    return reply.code(401).send({ error: 'Unauthorized' })
+  }
+
+  return reply.send({ ok: true })
+})
+
+// all other default static HTML files
 fastify.register(require('@fastify/static'), {
   root: publicFolder,
 })

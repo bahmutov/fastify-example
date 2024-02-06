@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>With 🍪 and 🗝️</h1>
+    <button id="request">Make request</button>
+    <script>
+      document.getElementById('request').addEventListener('click', function () {
+        fetch('/api/with-cookie', {
+          credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-api-key': 'App custom key',
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data)
+          })
+      })
+    </script>
+  </body>
+</html>
