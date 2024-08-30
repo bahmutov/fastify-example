@@ -1,0 +1,25 @@
+<body>
+  <h1>Loading</h1>
+  <p>This page shows the loading element while loading the data.</p>
+  <p>Picked a random fruit: <span id="fruit">loading...</span></p>
+  <script>
+    function getFruit() {
+      fetch('/fruit')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`)
+          }
+          return response.json()
+        })
+        .then((data) => {
+          document.getElementById('fruit').innerText = data.fruit
+        })
+        .catch((err) => {
+          console.error('error fetching fruit')
+          console.error(err)
+          document.getElementById('fruit').innerText = err.message
+        })
+    }
+    getFruit()
+  </script>
+</body>
