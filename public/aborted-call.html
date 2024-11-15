@@ -1,0 +1,28 @@
+<html>
+  <body>
+    <h1>Aborted call</h1>
+    <p>
+      This page makes two network calls. The first one is aborted after 500ms
+    </p>
+    <script>
+      // the first request (aborted)
+      const controller = new AbortController()
+      const signal = controller.signal
+
+      fetch('/delay/1000', { signal }).catch((err) => {
+        console.error('error fetching fruit')
+        console.error(err)
+      })
+
+      setTimeout(() => {
+        console.log('aborting the first call')
+        controller.abort()
+      }, 500)
+
+      // the second request
+      setTimeout(() => {
+        fetch('/delay/1000')
+      }, 700)
+    </script>
+  </body>
+</html>
