@@ -1,0 +1,23 @@
+<body>
+  <h1>Slow page</h1>
+  <p>This page makes an Ajax call that takes 5 seconds to resolve.</p>
+  <p><span id="loading">loading...</span></p>
+  <script>
+    fetch('/delay/5000')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`)
+        }
+        return response.json()
+      })
+      .then((data) => {
+        if (data.ok !== true) {
+          throw new Error('Incorrect data')
+        }
+        document.getElementById('loading').innerText = 'data loaded'
+      })
+      .catch((err) => {
+        document.getElementById('loading').innerText = err.message
+      })
+  </script>
+</body>
