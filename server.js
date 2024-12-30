@@ -573,6 +573,40 @@ fastify.post('/add-item', (req, reply) => {
   }, addingDelay)
 })
 
+fastify.post('/add-item-flaky', (req, reply) => {
+  const item = {
+    name: req.body['item-name'],
+    price: parseInt(req.body.price),
+  }
+
+  console.log('flaky adding item request %o', item)
+  reply.type('text/html').send(stripIndent`
+    <body>
+      <h3>${req.body['item-name']} will be added</h3>
+      <p>It might take a few minutes for the item to be added and indexed</p>
+    </body>
+  `)
+
+  const failedToAdd = Math.random() < 0.3
+  if (failedToAdd) {
+    console.log('❌ failed to add the item %o', item)
+    return
+  }
+
+  const maxDelay = 29_000
+  const addingDelay = Math.random() * maxDelay
+
+  console.log(
+    'will add item %o to the database after %s',
+    item,
+    humanizeDuration(addingDelay, { round: true }),
+  )
+  setTimeout(() => {
+    console.log('adding the item %o to the database', item)
+    items.push(item)
+  }, addingDelay)
+})
+
 fastify.get('/items/:name', (req, reply) => {
   console.log('fetching the item with name "%s"', req.params.name)
 
