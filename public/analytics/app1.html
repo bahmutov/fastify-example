@@ -1,0 +1,44 @@
+<body>
+  <h1>Analytics App 1</h1>
+  <script>
+    // application sends a few analytics network requests
+    setTimeout(() => {
+      fetch('/analytics', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ eventId: 'login' }),
+      })
+    }, 2000 * Math.random())
+
+    setTimeout(() => {
+      fetch('/analytics', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventId: 'cart_empty',
+          userId: '1234',
+        }),
+      })
+    }, 2000 * Math.random())
+
+    setTimeout(() => {
+      fetch('/analytics', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventId: 'purchase',
+          itemId: '0X123',
+        }),
+      })
+    }, 2000 * Math.random())
+  </script>
+</body>

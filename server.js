@@ -277,6 +277,10 @@ fastify.post('/slow/:id', (request, reply) => {
   }, 10_000)
 })
 
+fastify.post('/analytics', (request, reply) => {
+  reply.send({ ok: true })
+})
+
 fastify.get('/sorted', (request, reply) => {
   console.log('/sorted with the following query')
   console.log(request.query)
