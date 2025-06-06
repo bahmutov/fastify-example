@@ -1,0 +1,39 @@
+<body>
+  <h1>Analytics App 1</h1>
+  <script>
+    // application sends a few analytics network requests
+    // but they are grouped sometimes into a list of events
+    setTimeout(() => {
+      // send 2 events in one request
+      fetch('/analytics', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify([
+          { eventId: 'login' },
+          {
+            eventId: 'purchase',
+            itemId: '0X123',
+          },
+        ]),
+      })
+    }, 2000 * Math.random())
+
+    // send a single event
+    setTimeout(() => {
+      fetch('/analytics', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventId: 'cart_empty',
+          userId: '1234',
+        }),
+      })
+    }, 2000 * Math.random())
+  </script>
+</body>
