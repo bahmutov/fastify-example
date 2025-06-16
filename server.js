@@ -262,7 +262,9 @@ fastify.get('/unreliable', (request, reply) => {
 })
 
 fastify.get('/delay/:ms', (request, reply) => {
-  const ms = request.params.ms || 1000
+  console.log(request.params)
+  const ms = parseInt(request.params.ms || 1000)
+  console.log('delay response by %d ms', ms)
   setTimeout(() => {
     console.log('sending after delay %d', ms)
     reply.send({ ok: true })
@@ -285,6 +287,25 @@ fastify.get('/sorted', (request, reply) => {
   console.log('/sorted with the following query')
   console.log(request.query)
   reply.send({ query: request.query })
+})
+
+fastify.post('/create-user', (request, reply) => {
+  const userId = request.body.userId
+  console.log('creating user with id %s', userId)
+  const shouldFail = Math.random() < 0.2
+  if (shouldFail) {
+    console.log('❌ failed to create user %s', userId)
+    return reply.send({ error: 'Failed to create user' })
+  }
+
+  const shouldWait = Math.random() < 0.9
+  if (shouldWait) {
+    console.log('🕰️ Still waiting to create user %s', userId)
+    return reply.send({ userId, data: 'creating...' })
+  }
+
+  console.log('✅ created user %s', userId)
+  return reply.send({ userId, data: 'created' })
 })
 
 fastify.get('/with-cookie', (request, reply) => {
