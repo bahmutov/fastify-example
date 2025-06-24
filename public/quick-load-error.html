@@ -1,0 +1,36 @@
+<body>
+  <h1>Quick Load Error</h1>
+  <main id="main">Main area</main>
+  <script>
+    // set a JSON objet that allows the request to fail
+    fetch('/delay/1000', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        // the error change between 0 and 1
+        'x-fail-probability': '0',
+      },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data)
+        if (data.ok) {
+          document.getElementById('main').innerHTML = 'Loaded successfully!'
+        } else {
+          document.getElementById('main').innerHTML = 'Failed to load data'
+          // make the request again
+          // and this time do not allow it to fail
+          fetch('/delay/100', {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+          }).then(() => {
+            document.getElementById('main').innerHTML = 'Loaded successfully!'
+          })
+        }
+      })
+  </script>
+</body>

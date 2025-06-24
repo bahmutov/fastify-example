@@ -262,12 +262,27 @@ fastify.get('/unreliable', (request, reply) => {
 })
 
 fastify.get('/delay/:ms', (request, reply) => {
-  console.log(request.params)
+  console.log('request params %o', request.params)
   const ms = parseInt(request.params.ms || 1000)
   console.log('delay response by %d ms', ms)
+
+  const result = { ok: true }
+
+  const failProbabilityStr = request.headers['x-fail-probability']
+  if (failProbabilityStr) {
+    const failProbability = parseFloat(failProbabilityStr)
+    if (!isNaN(failProbability)) {
+      console.log('request fail probability %d', failProbability)
+      if (Math.random() < failProbability) {
+        console.log('will fail the request 🚨')
+        result.ok = false
+      }
+    }
+  }
+
   setTimeout(() => {
     console.log('sending after delay %d', ms)
-    reply.send({ ok: true })
+    reply.send(result)
   }, ms)
 })
 
