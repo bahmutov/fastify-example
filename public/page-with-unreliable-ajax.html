@@ -1,0 +1,16 @@
+<body>
+  <h1>Page makes unreliable AJAX requests</h1>
+  <output id="result"></output>
+  <script>
+    fetch('/unreliable')
+      .then((r) => {
+        if (!r.ok) throw new Error('Network response was not ok')
+      })
+      .then(() => {
+        document.getElementById('result').innerText = 'Request succeeded'
+      })
+      .catch(() => {
+        document.getElementById('result').innerText = 'Request failed'
+      })
+  </script>
+</body>
