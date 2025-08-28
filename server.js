@@ -261,6 +261,19 @@ fastify.get('/unreliable', (request, reply) => {
   }
 })
 
+let isUnreliable = true
+fastify.get('/unreliable1', (request, reply) => {
+  if (isUnreliable) {
+    console.log('returning an unreliable error')
+    reply.code(500).send('Server error')
+  } else {
+    console.log('return unreliable success')
+    reply.send({ ok: true })
+  }
+
+  isUnreliable = !isUnreliable
+})
+
 fastify.get('/delay/:ms', (request, reply) => {
   console.log('request params %o', request.params)
   const ms = parseInt(request.params.ms || 1000)
