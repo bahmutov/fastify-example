@@ -939,6 +939,13 @@ fastify.get('/time-check', (req, reply) => {
   `)
 })
 
+fastify.post('/api/v1/orders', (request, reply) => {
+  console.log('creating new item')
+  const id = 1022
+  const createdAt = new Date().toISOString()
+  reply.status(201).send({ id, protocol: 'PRT-2026-0042', createdAt })
+})
+
 // Run the server!
 const start = async () => {
   try {
