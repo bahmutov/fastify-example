@@ -6,9 +6,10 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./server",
+    "start": "concurrently 'npm run start:static' 'npm run start:cors' 'npm run start:auth'",
     "start:cors": "node ./server-cors",
     "start:auth": "node ./server-auth",
+    "start:static": "node ./server",
     "watch": "nodemon ./server",
     "watch:cors": "nodemon ./server-cors",
     "watch:auth": "nodemon ./server-auth"
@@ -31,6 +32,7 @@
     "humanize-duration": "^3.27.2"
   },
   "devDependencies": {
+    "concurrently": "^10.0.5",
     "nodemon": "^2.0.20",
     "prettier": "^2.7.1"
   }
