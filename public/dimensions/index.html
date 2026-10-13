@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f5f0" />
+    <title>Dimension estimate</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: 'DM Sans', sans-serif;
+        color: #1c2923;
+        background: #f3f5f0;
+        font-synthesis: none;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 32px 20px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(
+              135deg,
+              transparent 49.8%,
+              #e6eae3 50%,
+              transparent 50.2%
+            )
+            0 0 / 34px 34px,
+          #f3f5f0;
+      }
+
+      main {
+        width: min(100%, 620px);
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #dfe5dd;
+        border-radius: 8px;
+        box-shadow: 0 18px 55px #26372c12;
+        animation: arrive 420ms ease-out both;
+      }
+
+      header {
+        padding: 32px 36px 26px;
+        border-bottom: 1px solid #e8ece6;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: #557b57;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+        font-weight: 500;
+        line-height: 1.1;
+      }
+
+      header p:last-child {
+        margin: 10px 0 0;
+        color: #69766d;
+        line-height: 1.55;
+      }
+
+      .content {
+        min-height: 214px;
+        padding: 32px 36px;
+      }
+
+      #status {
+        min-height: 24px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #4a5a4e;
+        font-size: 0.95rem;
+      }
+      #status[hidden] {
+        display: none;
+      }
+
+      .spinner {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 auto;
+        border: 2px solid #d9e3d8;
+        border-top-color: #397144;
+        border-radius: 50%;
+        animation: spin 750ms linear infinite;
+      }
+
+      .spinner[hidden] {
+        display: none;
+      }
+
+      .measurements {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 25px;
+      }
+
+      .measurement {
+        padding: 16px;
+        border: 1px solid #e5eae3;
+        border-radius: 6px;
+        background: #f8faf7;
+      }
+
+      .measurement dt {
+        color: #69766d;
+        font-size: 0.76rem;
+        font-weight: 600;
+      }
+
+      .measurement dd {
+        margin: 8px 0 0;
+        font-size: 1.5rem;
+        font-weight: 650;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .measurement dd span {
+        margin-left: 3px;
+        color: #69766d;
+        font-size: 0.82rem;
+        font-weight: 500;
+      }
+
+      .confidence {
+        margin: 18px 0 0;
+        color: #69766d;
+        font-size: 0.85rem;
+      }
+
+      .confidence strong {
+        color: #1c2923;
+      }
+
+      .actions {
+        min-height: 74px;
+        padding: 15px 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-top: 1px solid #e8ece6;
+        background: #fbfcfa;
+      }
+
+      .actions p {
+        margin: 0;
+        color: #78837b;
+        font-size: 0.8rem;
+      }
+
+      button {
+        min-height: 42px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 5px;
+        background: #244d30;
+        color: #fff;
+        font: inherit;
+        font-size: 0.88rem;
+        font-weight: 650;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #183a23;
+      }
+
+      button:focus-visible {
+        outline: 3px solid #e6a047;
+        outline-offset: 3px;
+      }
+
+      button:disabled {
+        cursor: wait;
+        opacity: 0.6;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes arrive {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 16px 12px;
+        }
+
+        header,
+        .content {
+          padding-right: 22px;
+          padding-left: 22px;
+        }
+
+        .actions {
+          padding-right: 22px;
+          padding-left: 22px;
+        }
+
+        .measurements {
+          gap: 8px;
+        }
+
+        .measurement {
+          padding: 12px 9px;
+        }
+
+        .measurement dd {
+          font-size: 1.25rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Object analysis</p>
+        <h1>Dimension estimate</h1>
+        <p>Estimated measurements for your item.</p>
+      </header>
+      <section class="content" aria-live="polite" aria-busy="true">
+        <p id="status">
+          <span class="spinner" aria-hidden="true"></span>Loading
+        </p>
+        <div id="result" hidden>
+          <dl class="measurements">
+            <div class="measurement">
+              <dt>Width</dt>
+              <dd><span id="width">--</span><span class="unit"></span></dd>
+            </div>
+            <div class="measurement">
+              <dt>Height</dt>
+              <dd><span id="height">--</span><span class="unit"></span></dd>
+            </div>
+            <div class="measurement">
+              <dt>Depth</dt>
+              <dd><span id="depth">--</span><span class="unit"></span></dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+      <footer class="actions">
+        <p>Predictions may vary.</p>
+        <button id="retry" type="button" hidden>Try again</button>
+      </footer>
+    </main>
+
+    <script>
+      const content = document.querySelector('.content')
+      const status = document.getElementById('status')
+      const spinner = status.querySelector('.spinner')
+      const result = document.getElementById('result')
+      const retry = document.getElementById('retry')
+
+      async function getDimensions() {
+        content.setAttribute('aria-busy', 'true')
+        status.hidden = false
+        status.lastChild.textContent = 'Loading'
+        spinner.hidden = false
+        result.hidden = true
+        retry.hidden = true
+        retry.disabled = true
+
+        try {
+          const response = await fetch('/dimensions', { method: 'POST' })
+          if (!response.ok) {
+            throw new Error(`Request failed (${response.status})`)
+          }
+
+          const data = await response.json()
+          if (!data.dimensions) {
+            status.lastChild.textContent = 'No dimensions predicted this time.'
+            retry.hidden = false
+            return
+          }
+
+          const dimensions = data.dimensions
+          document.getElementById('width').textContent = dimensions.width
+          document.getElementById('height').textContent = dimensions.height
+          document.getElementById('depth').textContent = dimensions.depth
+          document.querySelectorAll('.unit').forEach((unit) => {
+            unit.textContent = dimensions.units
+          })
+
+          status.hidden = true
+          result.hidden = false
+          retry.hidden = false
+        } catch (error) {
+          status.lastChild.textContent = `Could not load dimensions: ${error.message}`
+          retry.hidden = false
+        } finally {
+          content.setAttribute('aria-busy', 'false')
+          spinner.hidden = true
+          retry.disabled = false
+        }
+      }
+
+      retry.addEventListener('click', getDimensions)
+      getDimensions()
+    </script>
+  </body>
+</html>

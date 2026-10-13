@@ -371,6 +371,25 @@ fastify.get('/api/with-cookie', (request, reply) => {
   return reply.send({ ok: true })
 })
 
+fastify.post('/dimensions', (request, reply) => {
+  const chance = Math.random()
+  if (chance < 0.5) {
+    console.log('no dimensions predictions')
+    return reply.send({ dimensions: null })
+  } else {
+    console.log('sending dimensions predictions')
+    return reply.send({
+      dimensions: {
+        width: 5,
+        height: 10,
+        depth: 4,
+        units: 'in',
+        confidence: 0.7,
+      },
+    })
+  }
+})
+
 // all other default static HTML files
 fastify.register(require('@fastify/static'), {
   root: publicFolder,
